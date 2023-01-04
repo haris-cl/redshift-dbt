@@ -99,3 +99,18 @@ The ability for objects to reference other objects improves code reusability but
 Materialized view stores precomputed results to reduce processing time for complex queries involving multi-table joins and aggregations.
 
 In this Lab, you will simulate an Experimental department that is exploring a dbt experimental feature.
+
+
+## Project outputs
+
+### Docs
+
+![](./img/dbt-docs.png)
+
+### Dag
+
+![](./img/dbt-dag.png)
+
+### Database
+
+![](./img/database.png)
