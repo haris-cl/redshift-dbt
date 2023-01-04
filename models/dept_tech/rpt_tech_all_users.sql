@@ -1,0 +1,20 @@
+select
+    {{ macro_pii_masking_numeric('userid') }} as userid,
+    {{ macro_pii_masking_text('username') }} as username,
+    {{ macro_pii_masking_text('firstname') }} as firstname,
+    {{ macro_pii_masking_text('lastname') }} as lastname,
+    city,
+    state,
+    {{ macro_pii_masking_text('email') }} as email,
+    phone,
+    likesports,
+    liketheatre,
+    likeconcerts,
+    likejazz,
+    likeclassical,
+    likeopera,
+    likerock,
+    likevegas,
+    likebroadway,
+    likemusicals
+from {{ref('base_public_users')}}

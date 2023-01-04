@@ -1,0 +1,73 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'training'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'training'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+# In this example config, we tell dbt to build all models in the example/ directory
+# as tables. These settings can be overridden in the individual model files
+# using the `{{ config(...) }}` macro.
+models:
+  training:
+    # Config indicated by + and applies to all files under models/example/
+    example:
+      +materialized: view
+    base_public:
+      +materialized: ephemeral
+    dept_finance:
+      +materialized: view
+      schema: dept_finance
+    dept_tech:
+      +materialized: view
+      schema: dept_tech
+    dept_marketing:
+      +materialized: view
+      schema: dept_marketing 
+    dept_experimental:
+      +materialized: materialized_view
+      schema: dept_experimental 
+
+vars:
+    new_user_default_pwd: 'Password123'
+    dbt_managed_users: [
+        'finance_user',
+        'masked_user',
+        'unmasked_user'
+    ]
+    dbt_managed_grants: {
+        'public_dept_finance': ['does_not_exist_user', 'finance_user'],
+        'public_dept_tech': ['masked_user', 'unmasked_user'],
+        'public': ['finance_user', 'masked_user', 'unmasked_user']
+    }
+
+seeds:
+  training:
+    dept_marketing:
+      schema: dept_marketing
+
+on-run-end:
+  - "{{ macro_manage_users_grants(schemas) }}"
